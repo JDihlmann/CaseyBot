@@ -61,13 +61,6 @@ function youtubeRequest() {
 	});
 }
 
-bot.on('message', function(data) {
-	if(data.type == 'message' && data.channel == 'D0SDQ77BK' && data.user =='U0KDWE1DZ') {
-		bot.postMessageToUser('jan', 'ping'); 
-	}
-});
-
-
 
 // Write Data to Storage 
 function writeData(videoURL) {
