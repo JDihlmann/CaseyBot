@@ -40,7 +40,6 @@ var bot = new slackbot({
 // Send Youtube Requests
 function youtubeRequest() {
 	youtube.activities.list({key: api_key, part:'contentDetails', channelId: 'UCtinbF-Q-fVthA0qrFQTgXQ', maxResults: 1}, function(err, res) {
-		if(!err) {
 			var content = res.items[0].contentDetails
 			if(content) {
 				var upload = content.upload
@@ -53,17 +52,22 @@ function youtubeRequest() {
 						if(!err) {
 							if(res.video != videoURL) {
 								writeData(videoURL)
-								bot.postMessageToChannel('raspberrypitesti', videoURL, {as_user: true});
+								bot.postMessageToChannel('general', videoURL, {as_user: true});
 							}
 						}
 					})
 				}
 			}
-		} else {
-			console.log(err)
-		}
 	});
 }
+
+bot.on('message', function(data) {
+	if(data.type == 'message' && data.channel == 'D0SDQ77BK' && data.user =='U0KDWE1DZ') {
+		bot.postMessageToUser('jan', 'ping'); 
+	}
+});
+
+
 
 // Write Data to Storage 
 function writeData(videoURL) {
@@ -79,4 +83,4 @@ function writeData(videoURL) {
 // Intervall
 var intervall = setInterval(function() { 
 	youtubeRequest()
-}, 3000);
+}, 30000);

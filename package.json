@@ -1,6 +1,6 @@
 {
   "name": "node-js-getting-started",
-  "version": "0.1",
+  "version": "0.1.5",
   "description": "Youtube Slack Bot Node",
   "main": "index.js",
   "scripts": {
@@ -11,18 +11,5 @@
     "googleapis": "*",
     "slackbots": "*",
     "jsonfile": "*"
-  },
-  "engines": {
-    "node": "0.12.7"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
-  },
-  "keywords": [
-    "bot",
-    "node",
-    "slack",
-    "casey",
-  ]
+  }
 }
