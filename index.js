@@ -8,6 +8,7 @@ var server = require('http').createServer(app);
 var google = require('googleapis');
 var slackbot = require('slackbots');
 var mongoose = require('mongoose');
+var request = require('request');
 
 
 //Start Application And Socket Listen
@@ -17,31 +18,21 @@ console.log("Server started on " + port);
 
 
 
-
-//Website
-app.get('/', function (req, res) {
- 	res.send('<html><body><h1>Hello World</h1></body></html>');
-});
-
-
-
 //MongoDB 
-mongoose.connect('mongodb://localhost/caseybot');
-
+mongoose.connect('mongodb://localhost:4321/caseybot');
 var db = mongoose.connection;
-var video = db.collection('video');
-var companies = db.collection('companies');
 
 db.on('error', function (err) {
-	console.log('connection error', err);
+	console.log('Database Connection Error: ', err);
 });
 
 db.once('open', function () {
-	console.log('connected.');
+	console.log('Database connected');
 });
 
 
-//MongoDB Schema
+//MongoDB Schema Video
+var video = db.collection('video');
 var videoSchema = mongoose.Schema({
     id: String
 });
@@ -50,89 +41,77 @@ videoSchema.methods.getURL = function () {
 	return 'https://www.youtube.com/watch?v=' + this.id
 }
 
-var Videos = mongoose.model('videos', videoSchema);
+var Video = mongoose.model('videos', videoSchema);
 
 
+//MongoDB Schema Companies
+var companies = db.collection('companies');
+var companySchema = mongoose.Schema({
+    token: String,
+    teamID: String,
+    teamName: String
+});
+
+companySchema.methods.sendToTeam = function (videoURL) {
+	var bot = new SlackBot({
+    	token: this.token,
+    	name: 'Casey'
+	});
+}
+
+var Company = mongoose.model('companies', companySchema);
 
 
 
 // Setup Youtube API
+var part = 'contentDetails'
 var api_key = process.env.GOOGLE_KEY;
+var channelID = 'UCtinbF-Q-fVthA0qrFQTgXQ'
 var youtube = google.youtube('v3');
-
-
-// // Slackbot
-// var bot = new slackbot({
-//     token: process.env.SLACK_KEY,
-//     name: 'casey'
-// });
 
 
 
 
 // Send Youtube Requests
-function youtubeRequest() {
-	youtube.activities.list({key: api_key, part:'contentDetails', channelId: 'UCtinbF-Q-fVthA0qrFQTgXQ', maxResults: 1}, function(err, res) {
-			// var videoURL = res.items[0].contentDetails.upload.videoId
-			// console.log(videoURL)
-
-			if(!err) {
-				var videoID  = res.items[0].contentDetails.upload.videoId
-
-				var currentVideo = new Video({ id: videoID }); 
-
-				currentVideo.save(function (err) {
-  					if (err) return console.log(err);
-				});
-
-
-
-				Videos.find({}, function(err, videos) {
-    				videos.forEach(function(video) {
-	      				console.log(video)
-	    			});
-  				});
-
-
-
-
-
-
-
-				//console.log(videoID)
-			}
-
-
-
-
-
-			// if(content) {
-			// 	var upload = content.upload
-			// 	if(upload) {
-			// 		var video = upload.videoId
-			// 		var videoURL = 'https://www.youtube.com/watch?v=' + video
-
-
-			// 		console.log(videoURL)
-			// 		//if(res.video != videoURL) {
-			// 		//bot.postMessageToChannel('general', videoURL, {as_user: true});
-
-
-
-			// 		// Store Data 
-			// 		jsonfile.readFile(file, function(err, res) {
-			// 			if(!err) {
-			// 				if(res.video != videoURL) {
-			// 					writeData(videoURL)
-			// 					bot.postMessageToChannel('general', videoURL, {as_user: true});
-			// 				}
-			// 			}
-			// 		})
-			// 	}
-			// }
+function videoYoutubeRequest() {
+	youtube.activities.list({key: api_key, part: part, channelId: channelID, maxResults: 1}, function(err, res) {
+		if(!err) {
+			var videoID  = res.items[0].contentDetails.upload.videoId
+			Video.find({ 'id': videoID }, function(err, videos) {
+				if(!err && videos.length == 0) {
+					videoUploaded(videoID)
+					console.log("New Video added with ID: " + videoID)
+				}
+  			});
+		}
 	});
 }
 
+function videoUploaded(videoID) {
+
+	//Mongo DB Object
+	var currentVideo = new Video({ id: videoID });
+
+	saveVideoToDB(currentVideo)
+	sendVideoToEveryTeam(currentVideo.getURL())
+}
+
+function sendVideoToEveryTeam(videoURL) {
+
+
+}
+
+
+function saveToDB(obj) {
+	obj.save(function (err) {
+  		if (err) return handleError(err);
+	})
+}
+
+
+function handleError(err) {
+	console.log(err)
+}
 
 
 
@@ -140,5 +119,32 @@ function youtubeRequest() {
 // Intervall
 var intervallFrequenz = 3000
 var intervall = setInterval(function() { 
-	youtubeRequest()
+	videoYoutubeRequest()
 }, intervallFrequenz);
+
+
+
+//Website
+app.get('/', function (req, res) {
+	var testString = '<a href="https://slack.com/oauth/authorize?scope=bot&client_id=19474255650.38637281299"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+	Company.find({}, function(err, companies) {
+		if(!err) {
+			res.send('<html><body><h3> Subscribed User:' + companies.count + '</h3>' + testString + '</body></html>');
+		} else {
+			res.send('<html><body><h3> Error </h3>' + testString + '</body></html>');
+		}
+  	});
+});
+
+//Website
+app.get('/oauth', function (req, res) {
+
+	console.log(res)
+
+	// var form = {
+
+	// }
+	// request.post({url:'http://service.com/upload', form: {key:'value'}}, function(err,httpResponse,body){ 
+
+	// })
+});
