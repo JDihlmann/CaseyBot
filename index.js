@@ -8,9 +8,7 @@ var server = require('http').createServer(app);
 var jsonfile = require('jsonfile')
 var google = require('googleapis');
 var slackbot = require('slackbots');
-var MongoClient = require('mongodb').MongoClient
-var format = require('util').format;
- 
+var mongoose = require('mongoose');
 
 
 //Start Application And Socket Listen
@@ -18,14 +16,15 @@ var port =  3000;
 server.listen(port);
 console.log("Server started on " + port);
 
-MongoClient.connect('mongodb://localhost/caseybot', function (err, db) {
-    if (err) {
-        throw err;
-    } else {
-        console.log("successfully connected to the database");
-    }
-    db.close();
-});
+
+mongoose.connect('mongodb://localhost/casebot');
+
+var db = mongoose.connection;
+
+
+
+
+
 
 
 app.get('/', function (req, res) {

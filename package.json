@@ -11,6 +11,6 @@
     "googleapis": "*",
     "slackbots": "*",
     "jsonfile": "*",
-    "mongodb": "*"
+    "mongoose": "*"
   }
 }
