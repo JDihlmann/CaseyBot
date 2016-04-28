@@ -28,6 +28,10 @@ MongoClient.connect('mongodb://localhost/caseybot', function (err, db) {
 });
 
 
+app.get('/', function (req, res) {
+  res.send('<html><body><h1>Hello World</h1></body></html>');
+});
+
 
 
 // // Setup Youtube API
