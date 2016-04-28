@@ -19,7 +19,7 @@ console.log("Server started on " + port);
 
 
 //MongoDB 
-mongoose.connect('mongodb://localhost:4321/caseybot');
+mongoose.connect('mongodb://localhost:27017/caseybot');
 var db = mongoose.connection;
 
 db.on('error', function (err) {
