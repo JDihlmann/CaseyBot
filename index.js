@@ -5,7 +5,6 @@ var app = express();
 // Other Modules
 var slackbot = require('slackbots');
 var server = require('http').createServer(app);  
-var jsonfile = require('jsonfile')
 var google = require('googleapis');
 var slackbot = require('slackbots');
 var mongoose = require('mongoose');
@@ -17,31 +16,49 @@ server.listen(port);
 console.log("Server started on " + port);
 
 
-mongoose.connect('mongodb://localhost/casebot');
-
-var db = mongoose.connection;
 
 
-
-
-
-
-
+//Website
 app.get('/', function (req, res) {
-  res.send('<html><body><h1>Hello World</h1></body></html>');
+ 	res.send('<html><body><h1>Hello World</h1></body></html>');
 });
 
 
 
-// // Setup Youtube API
-// var api_key = process.env.GOOGLE_KEY;
-// var youtube = google.youtube('v3');
-// //var currentURL = "getURL"
+//MongoDB 
+mongoose.connect('mongodb://localhost/caseybot');
 
-// //Setup File 
-// var file = 'storage/storage.json'
+var db = mongoose.connection;
+var video = db.collection('video');
+var companies = db.collection('companies');
+
+db.on('error', function (err) {
+	//console.log('connection error', err);
+});
+
+db.once('open', function () {
+	//console.log('connected.');
+});
 
 
+//MongoDB Schema
+var videoSchema = mongoose.Schema({
+    id: String
+});
+
+videoSchema.methods.getURL = function () {
+	return 'https://www.youtube.com/watch?v=' + this.id
+}
+
+var Video = mongoose.model('Video', videoSchema);
+
+
+
+
+
+// Setup Youtube API
+var api_key = process.env.GOOGLE_KEY;
+var youtube = google.youtube('v3');
 
 
 // // Slackbot
@@ -52,45 +69,69 @@ app.get('/', function (req, res) {
 
 
 
-// // Send Youtube Requests
-// function youtubeRequest() {
-// 	youtube.activities.list({key: api_key, part:'contentDetails', channelId: 'UCtinbF-Q-fVthA0qrFQTgXQ', maxResults: 1}, function(err, res) {
-// 			var content = res.items[0].contentDetails
-// 			if(content) {
-// 				var upload = content.upload
-// 				if(upload) {
-// 					var video = upload.videoId
-// 					var videoURL = 'https://www.youtube.com/watch?v=' + video
 
-// 					// Store Data 
-// 					jsonfile.readFile(file, function(err, res) {
-// 						if(!err) {
-// 							if(res.video != videoURL) {
-// 								writeData(videoURL)
-// 								bot.postMessageToChannel('general', videoURL, {as_user: true});
-// 							}
-// 						}
-// 					})
-// 				}
-// 			}
-// 	});
-// }
+// Send Youtube Requests
+function youtubeRequest() {
+	youtube.activities.list({key: api_key, part:'contentDetails', channelId: 'UCtinbF-Q-fVthA0qrFQTgXQ', maxResults: 1}, function(err, res) {
+			// var videoURL = res.items[0].contentDetails.upload.videoId
+			// console.log(videoURL)
+
+			if(!err) {
+				var videoID  = res.items[0].contentDetails.upload.videoId
+
+				var currentVideo = new Video({ id: videoID });
+				//console.log(currentVideo.getURL()); 
+
+				currentVideo.save(function (err, video) {
+  					if (err) {
+  						return console.error(err)
+  					} else {
+  						return console.error(worked)
+  					}
+				});
 
 
 
-
-// // Write Data to Storage 
-// function writeData(videoURL) {
-// 	var obj = {video: videoURL}
-// 	jsonfile.writeFile(file, obj, function (err) {
-// 		if(err) {
-// 			console.log(err)
-// 		}
-// 	})
-// }
+				//console.log(videoID)
+			}
 
 
-// // Intervall
-// var intervall = setInterval(function() { 
-// 	youtubeRequest()
-// }, 30000);
+
+
+
+			// if(content) {
+			// 	var upload = content.upload
+			// 	if(upload) {
+			// 		var video = upload.videoId
+			// 		var videoURL = 'https://www.youtube.com/watch?v=' + video
+
+
+			// 		console.log(videoURL)
+			// 		//if(res.video != videoURL) {
+			// 		//bot.postMessageToChannel('general', videoURL, {as_user: true});
+
+
+
+			// 		// Store Data 
+			// 		jsonfile.readFile(file, function(err, res) {
+			// 			if(!err) {
+			// 				if(res.video != videoURL) {
+			// 					writeData(videoURL)
+			// 					bot.postMessageToChannel('general', videoURL, {as_user: true});
+			// 				}
+			// 			}
+			// 		})
+			// 	}
+			// }
+	});
+}
+
+
+
+
+
+// Intervall
+var intervallFrequenz = 3000
+var intervall = setInterval(function() { 
+	youtubeRequest()
+}, intervallFrequenz);
