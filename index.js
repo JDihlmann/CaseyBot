@@ -33,11 +33,11 @@ var db = mongoose.connection;
 // var companies = db.collection('companies');
 
 db.on('error', function (err) {
-	//console.log('connection error', err);
+	console.log('connection error', err);
 });
 
 db.once('open', function () {
-	//console.log('connected.');
+	console.log('connected.');
 });
 
 
