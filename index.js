@@ -29,8 +29,8 @@ app.get('/', function (req, res) {
 mongoose.connect('mongodb://localhost/caseybot');
 
 var db = mongoose.connection;
-var video = db.collection('video');
-var companies = db.collection('companies');
+// var video = db.collection('video');
+// var companies = db.collection('companies');
 
 db.on('error', function (err) {
 	//console.log('connection error', err);
@@ -41,16 +41,16 @@ db.once('open', function () {
 });
 
 
-//MongoDB Schema
-var videoSchema = mongoose.Schema({
-    id: String
-});
+// //MongoDB Schema
+// var videoSchema = mongoose.Schema({
+//     id: String
+// });
 
-videoSchema.methods.getURL = function () {
-	return 'https://www.youtube.com/watch?v=' + this.id
-}
+// videoSchema.methods.getURL = function () {
+// 	return 'https://www.youtube.com/watch?v=' + this.id
+// }
 
-var Video = mongoose.model('Video', videoSchema);
+// var Video = mongoose.model('Video', videoSchema);
 
 
 
@@ -79,16 +79,16 @@ function youtubeRequest() {
 			if(!err) {
 				var videoID  = res.items[0].contentDetails.upload.videoId
 
-				var currentVideo = new Video({ id: videoID });
+				//var currentVideo = new Video({ id: videoID });
 				//console.log(currentVideo.getURL()); 
 
-				currentVideo.save(function (err, video) {
-  					if (err) {
-  						return console.error(err)
-  					} else {
-  						return console.error(worked)
-  					}
-				});
+				// currentVideo.save(function (err, video) {
+  		// 			if (err) {
+  		// 				return console.error(err)
+  		// 			} else {
+  		// 				return console.error(worked)
+  		// 			}
+				// });
 
 
 
