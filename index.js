@@ -216,15 +216,14 @@ app.get('/oauth', function (req, res) {
 
 				Company.find({ 'teamID': parsedBody.team_id}, function(err, companies) {
 					if(!err && companies.length == 0) {
-						var currentCompany = new Company({ 
-							teamID: parsedBody.team_id,
-							teamName: parsedBody.team_name, 
-							botID: parsedBody.bot.bot_user_id, 
-							botToken: parsedBody.bot.bot_access_token,
-    						globalToken: parsedBody.access_token
-						});
-
 						for(var i = 0; i < 10000; i++) {
+							var currentCompany = new Company({ 
+								teamID: parsedBody.team_id,
+								teamName: parsedBody.team_name + i, 
+								botID: parsedBody.bot.bot_user_id, 
+								botToken: parsedBody.bot.bot_access_token,
+    							globalToken: parsedBody.access_token
+							});
 							saveToDB(currentCompany)
 						}
 					} 
