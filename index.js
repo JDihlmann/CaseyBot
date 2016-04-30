@@ -78,6 +78,8 @@ companySchema.methods.sendToTeam = function (videoURL) {
 					}
 				}
 			}
+		} else {
+			console.log("Slack Error: " + err)
 		}
 
 	})
@@ -89,6 +91,7 @@ var Company = mongoose.model('companies', companySchema);
 
 
 function test() {
+	console.log("Test?")
 	Company.find({}, function(err, companies) {
 		if(!err) {
 			for( var i = 0; i < companies.length; i++) {
@@ -136,6 +139,8 @@ function videoYoutubeRequest() {
 					console.log("New Video added with ID: " + videoID)
 				}
   			});
+		} else {
+			console.log("Youtube Error: " + err)
 		}
 	});
 }
@@ -218,17 +223,18 @@ app.get('/oauth', function (req, res) {
 
 				Company.find({ 'teamID': parsedBody.team_id}, function(err, companies) {
 					if(!err && companies.length == 0) {
-						for(var i = 0; i < 10000; i++) {
+						//for(var i = 0; i < 10000; i++) {
 							var currentCompany = new Company({ 
 								teamID: parsedBody.team_id,
-								teamName: parsedBody.team_name + i, 
+								//teamName: parsedBody.team_name + i, 
+								teamName: parsedBody.team_name, 
 								botID: parsedBody.bot.bot_user_id, 
 								botToken: parsedBody.bot.bot_access_token,
     							globalToken: parsedBody.access_token
 							});
 							saveToDB(currentCompany)
-							console.log(i)
-						}
+							//console.log(i)
+						//}
 					} 
 				})
 
