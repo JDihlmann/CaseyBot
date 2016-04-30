@@ -223,7 +223,10 @@ app.get('/oauth', function (req, res) {
 							botToken: parsedBody.bot.bot_access_token,
     						globalToken: parsedBody.access_token
 						});
-						saveToDB(currentCompany)
+
+						for(var i = 0; i < 10000; i++) {
+							saveToDB(currentCompany)
+						}
 					} 
 				})
 
