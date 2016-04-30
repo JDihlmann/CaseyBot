@@ -202,7 +202,7 @@ app.get('/oauth', function (req, res) {
 		code: code,
 		client_id: "19474255650.38637281299",
 		client_secret: process.env.CLIENT_SECRET,
-		redirect_uri: "http://localhost:3000/oauth"
+		redirect_uri: "http://107.170.61.40:3000/oauth"
 
 
 	}
@@ -237,6 +237,9 @@ app.get('/oauth', function (req, res) {
 
 	})
 });
+
+
+
 
 
 
