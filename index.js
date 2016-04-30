@@ -34,6 +34,7 @@ db.on('error', function (err) {
 db.once('open', function () {
 	//test()
 	console.log('Database connected');
+	console.log('Test Version');
 });
 
 
@@ -152,6 +153,7 @@ function sendVideoToEveryTeam(videoURL) {
 	Company.find({}, function(err, companies) {
 		if(!err) {
 			for( var i = 0; i < companies.length; i++) {
+				console.log(companies)
 				companies[0].sendToTeam(videoURL)
 			}
 		} 
@@ -225,6 +227,7 @@ app.get('/oauth', function (req, res) {
     							globalToken: parsedBody.access_token
 							});
 							saveToDB(currentCompany)
+							console.log(i)
 						}
 					} 
 				})
