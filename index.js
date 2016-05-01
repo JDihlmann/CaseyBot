@@ -203,7 +203,6 @@ function videoUploaded(videoID) {
 /* OAUTH */
 app.get('/oauth', function (req, res) {
 	if(req.query.code != undefined) {
-		JSON.parse(body)
 		var form = {
 			code: req.query.code,
 			client_id: "19474255650.38637281299",
