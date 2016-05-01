@@ -213,12 +213,12 @@ app.get('/oauth', function (req, res) {
 
 		request.post({url:'https://slack.com/api/oauth.access', form: form}, function(err, httpResponse, body){
 			if(!err) {
-				body = JSON.parse(body)
-				if(body.ok) {
-					caseybotCreateNewTeam(body)
+				var parsedBody = JSON.parse(body)
+				if(parsedBody.ok) {
+					caseybotCreateNewTeam(parsedBody)
 					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
 				} else {
-					res.send('<html><body><h3> Error:' +  body + '</h3></body></html>')
+					res.send('<html><body><h3> Error:' +  parsedBody + '</h3></body></html>')
 				}	
 			} else {
 				log(err)
