@@ -179,11 +179,18 @@ controller.hears(['tweet', 'twitter', 'tweets'],['direct_message','direct_mentio
 });
 
 
+// (F) Youtube Communication for Bot
+controller.hears(['youtube', 'video'],['direct_message','direct_mention','mention'],function(bot,message) {
+	bot.reply(message, 'https://www.youtube.com/watch?v=' + currentID);
+});
+
+
 
 
 
 /* YOUTUBE */
 // (V) Youtube Variable
+var currentID 
 var intervall = 3000
 var part = 'contentDetails'
 var api_key = process.env.GOOGLE_KEY;
@@ -196,7 +203,8 @@ var youtubeRequestIntervall = setInterval(function() {
 		if(!err) {
 			var upload = res.items[0].contentDetails.upload
 			if(upload != undefined) {
-				var videoID  = res.items[0].contentDetails.upload.videoId
+				var videoID = res.items[0].contentDetails.upload.videoId
+				currentID = videoID
 				Video.find({ 'id': videoID }, function(err, videos) {
 					if(!err && videos.length == 0) {
 						videoHasThumbnail(videoID)
@@ -208,7 +216,6 @@ var youtubeRequestIntervall = setInterval(function() {
 		}
 	});
 }, intervall);
-
 
 // (F) Youtube Video Has Thumbnail
 function videoHasThumbnail(videoID) {
