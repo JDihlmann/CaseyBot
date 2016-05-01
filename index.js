@@ -4,11 +4,12 @@ var app = express();
 
 // Other Modules
 var botkit = require('botkit');
+var Twitter = require('twitter');
 var request = require('request');
 var google = require('googleapis');
 var mongoose = require('mongoose');
-var slackbot = require('slackbots');
 var server = require('http').createServer(app);  
+var instagram = require('instagram-node').instagram();
 
 
 
@@ -101,6 +102,32 @@ function mongoSaveModel(obj) {
 
 
 
+/* TWITTER */
+var client = new Twitter({
+	consumer_key: process.env.CONSUMER_KEY,
+  	consumer_secret: process.env.CONSUMER_SECRET,
+  	access_token_key: process.env.ACCESS_TOKEN_KEY,
+  	access_token_secret: process.env.ACCESS_TOKEN_SECRET
+});
+
+
+
+
+/* INSTAGRAM */
+instagram.use({ access_token: 'YOUR_ACCESS_TOKEN' });
+instagram.use({ 
+	access_token: 'YOUR_ACCESS_TOKEN',
+	client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET 
+});
+
+instagram.user_media_recent('31027484', [], function(err, medias, pagination, remaining, limit) {
+	console.log(err)
+});
+
+
+
+
 /* BOTKIT */
 // (V) Bot Array
 var botArray = []
@@ -152,9 +179,23 @@ function botkitSendMessageToAllTeams(url) {
 	})
 }
 
-// (F) Setup bot communication
-controller.hears('hello',['direct_message','direct_mention','mention'],function(bot,message) {
-	bot.reply(message,'Stop chatting! Do more.');
+// (F) Tweet Communication for Bot
+controller.hears(['tweet', 'twitter', 'tweets'],['direct_message','direct_mention','mention'],function(bot,message) {
+	client.get('statuses/user_timeline', {user_id: '154221292', count: 1}, function(err, tweets, response){
+		if(!err) {
+			var tweetID = tweets[0].id_str
+			var tweetURL = 'https://twitter.com/CaseyNeistat/status/' + tweetID
+			bot.reply(message, tweetURL);
+		} else {
+			log(err)
+			bot.reply(message, 'Sorry, I have to work right know. Try later! #DoMore');
+		}
+	})
+});
+
+// (F) Instagram Communication for Bot
+controller.hears(['insta', 'instagram'],['direct_message','direct_mention','mention'],function(bot,message) {
+	
 });
 
 
@@ -202,6 +243,8 @@ function videoUploaded(videoID) {
 
 /* OAUTH */
 app.get('/oauth', function (req, res) {
+	console.log(req.body)
+	console.log(res.body)
 	if(req.query.code != undefined) {
 		var form = {
 			code: req.query.code,
