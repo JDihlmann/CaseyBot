@@ -9,7 +9,6 @@ var request = require('request');
 var google = require('googleapis');
 var mongoose = require('mongoose');
 var server = require('http').createServer(app);  
-var instagram = require('instagram-node').instagram();
 
 
 
@@ -113,20 +112,6 @@ var client = new Twitter({
 
 
 
-/* INSTAGRAM */
-instagram.use({ access_token: 'YOUR_ACCESS_TOKEN' });
-instagram.use({ 
-	//access_token: 'YOUR_ACCESS_TOKEN',
-	client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET 
-});
-
-instagram.user_media_recent('31027484', [], function(err, medias, pagination, remaining, limit) {
-	console.log(err)
-});
-
-
-
 
 /* BOTKIT */
 // (V) Bot Array
@@ -193,11 +178,6 @@ controller.hears(['tweet', 'twitter', 'tweets'],['direct_message','direct_mentio
 	})
 });
 
-// (F) Instagram Communication for Bot
-controller.hears(['insta', 'instagram'],['direct_message','direct_mention','mention'],function(bot,message) {
-	
-});
-
 
 
 
@@ -243,8 +223,6 @@ function videoUploaded(videoID) {
 
 /* OAUTH */
 app.get('/oauth', function (req, res) {
-	console.log(req.body)
-	console.log(res.body)
 	if(req.query.code != undefined) {
 		var form = {
 			code: req.query.code,

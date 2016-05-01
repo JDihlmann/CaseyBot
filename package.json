@@ -7,7 +7,6 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "instagram-node": "*",
     "express": "4.13.3",
     "googleapis": "*",
     "mongoose": "*",
