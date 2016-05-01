@@ -8,14 +8,7 @@ var request = require('request');
 var google = require('googleapis');
 var mongoose = require('mongoose');
 var slackbot = require('slackbots');
-var bodyParser = require('body-parser')
 var server = require('http').createServer(app);  
-
-// Setup Middelware
-app.use( bodyParser.json() );    
-app.use(bodyParser.urlencoded({  
-  extended: true
-})); 
 
 
 
@@ -210,6 +203,7 @@ function videoUploaded(videoID) {
 /* OAUTH */
 app.get('/oauth', function (req, res) {
 	if(req.query.code != undefined) {
+		JSON.parse(body)
 		var form = {
 			code: req.query.code,
 			client_id: "19474255650.38637281299",
@@ -219,6 +213,7 @@ app.get('/oauth', function (req, res) {
 
 		request.post({url:'https://slack.com/api/oauth.access', form: form}, function(err, httpResponse, body){
 			if(!err) {
+				body = JSON.parse(body)
 				if(body.ok) {
 					caseybotCreateNewTeam(body)
 					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
