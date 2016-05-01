@@ -184,7 +184,7 @@ controller.hears(['tweet', 'twitter', 'tweets'],['direct_message','direct_mentio
 
 /* YOUTUBE */
 // (V) Youtube Variable
-var intervall = 30000
+var intervall = 3000
 var part = 'contentDetails'
 var api_key = process.env.GOOGLE_KEY;
 var channelID = 'UCtinbF-Q-fVthA0qrFQTgXQ'
@@ -199,8 +199,7 @@ var youtubeRequestIntervall = setInterval(function() {
 				var videoID  = res.items[0].contentDetails.upload.videoId
 				Video.find({ 'id': videoID }, function(err, videos) {
 					if(!err && videos.length == 0) {
-						// Test for Thumbnail ?
-						videoUploaded(videoID)
+						videoHasThumbnail(videoID)
 					}
   				});
 			}
@@ -209,6 +208,34 @@ var youtubeRequestIntervall = setInterval(function() {
 		}
 	});
 }, intervall);
+
+
+// (F) Youtube Video Has Thumbnail
+function videoHasThumbnail(videoID) {
+	youtube.videos.list({key: api_key, part: 'snippet', id: videoID, maxResults: 1}, function(err, res) {
+		if(!err) {
+			console.log(res)
+			if(res.items[0] != undefined) {
+				var item = res.items[0]
+				if(item.snippet != undefined) {
+					var snippet = item.snippet
+					console.log(snippet)
+					if(snippet.thumbnails != undefined) {
+						var thumbnails = snippet.thumbnails
+						if(thumbnails.default != undefined) {
+							var defaults = thumbnails.default
+							if(defaults.url != undefined) {
+								videoUploaded(videoID)
+							}
+						}
+					}
+				}
+			}
+		} else {
+			log(err)
+		}
+	});
+}
 
 // (F) Youtube Video Uploaded
 function videoUploaded(videoID) {
