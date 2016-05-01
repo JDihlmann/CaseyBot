@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.1.5",
-  "description": "Youtube Slack Bot Node",
+  "name": "Caseybot",
+  "version": "1.0.0",
+  "description": "Do more",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,6 +11,7 @@
     "body-parser": "*",
     "googleapis": "*",
     "mongoose": "*",
-    "forever": "*"
+    "forever": "*",
+    "botkit": "*"
   }
 }
