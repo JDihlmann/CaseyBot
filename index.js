@@ -184,6 +184,11 @@ controller.hears(['youtube', 'video'],['direct_message','direct_mention','mentio
 	bot.reply(message, 'https://www.youtube.com/watch?v=' + currentID);
 });
 
+// (F) Youtube Communication for Bot
+controller.hears(['star trek', 'scotty'],['direct_message','direct_mention','mention'],function(bot,message) {
+	bot.reply(message, "Beme up scotty! Got the joke, ok wasn't funny ... sry");
+});
+
 
 
 
