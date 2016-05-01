@@ -116,7 +116,7 @@ var client = new Twitter({
 /* INSTAGRAM */
 instagram.use({ access_token: 'YOUR_ACCESS_TOKEN' });
 instagram.use({ 
-	access_token: 'YOUR_ACCESS_TOKEN',
+	//access_token: 'YOUR_ACCESS_TOKEN',
 	client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET 
 });
