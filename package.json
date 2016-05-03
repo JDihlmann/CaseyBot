@@ -2,7 +2,7 @@
   "name": "Caseybot",
   "version": "1.0.0",
   "description": "Do more",
-  "main": "index.js",
+  "main": "caseybot.js",
   "scripts": {
     "start": "node index.js"
   },
