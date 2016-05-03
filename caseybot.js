@@ -34,7 +34,7 @@ mongoose.init(function() {
 function createNewTeam(body) {
 	mongoose.Company.find({ 'teamID': body.team_id}, function(err, companies) {
 		if(!err && companies.length == 0) {
-			var currentCompany = new Company({ 
+			var currentCompany = new mongoose.Company({ 
 				teamID: body.team_id,
 				teamName: body.team_name, 
 				botID: body.bot.bot_user_id, 
