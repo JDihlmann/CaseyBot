@@ -1,4 +1,4 @@
-// Express Module 
+// Express Module
 var express = require('express');
 var app = express();
 
@@ -8,14 +8,14 @@ var Twitter = require('twitter');
 var request = require('request');
 var google = require('googleapis');
 var mongoose = require('mongoose');
-var server = require('http').createServer(app);  
+var server = require('http').createServer(app);
 
 
 
 
 
 /* SERVER */
-var port = 3000
+var port = 1040
 server.listen(port);
 console.log("Server started on " + port);
 
@@ -43,7 +43,7 @@ function log(message) {
 
 
 
-/* MONGO */ 
+/* MONGO */
 // (V) Mongo Variable
 var mongoPort = process.env.MONGO_PORT;
 var mongoURL = 'mongodb://localhost:' + mongoPort + '/caseybot'
@@ -80,7 +80,7 @@ var Video = mongoose.model('videos', videoSchema);
 // (V) Mongo schema for companies
 var companySchema = mongoose.Schema({
 	teamID: String,
-	teamName: String, 
+	teamName: String,
 	botID: String,
 	botToken: String,
     globalToken: String
@@ -117,14 +117,14 @@ var client = new Twitter({
 // (V) Bot Array
 var botArray = []
 
-// (V) BotKit controller 
+// (V) BotKit controller
 var controller = botkit.slackbot({
 	log: false,
 	debug: false
 });
- 
 
-// (F) Spawn bot 
+
+// (F) Spawn bot
 function botkitSpawnBot(token) {
 	var bot = controller.spawn({
 		token: token,
@@ -148,10 +148,10 @@ function botkitSpawnBotForCompanies() {
 function botkitSendMessageToAllTeams(url) {
 	botArray.forEach(function(bot) {
 		bot.api.channels.list({},function(err, response) {
-			if(!err) { 
+			if(!err) {
 				if(response.channels) {
 					var channels = response.channels
-					channels.forEach(function(channel) { 
+					channels.forEach(function(channel) {
 						if(channel.is_member && !channel.is_archived) {
 							bot.say({text: url, channel: channel.id});
 						}
@@ -195,7 +195,7 @@ controller.hears(['beme', 'star trek', 'scotty'],['direct_message','direct_menti
 
 /* YOUTUBE */
 // (V) Youtube Variable
-var currentID 
+var currentID
 var intervall = 3000
 var part = 'contentDetails'
 var api_key = process.env.GOOGLE_KEY;
@@ -203,7 +203,7 @@ var channelID = 'UCtinbF-Q-fVthA0qrFQTgXQ'
 var youtube = google.youtube('v3');
 
 // (F) Make Youtube Requests
-var youtubeRequestIntervall = setInterval(function() { 
+var youtubeRequestIntervall = setInterval(function() {
 	youtube.activities.list({key: api_key, part: part, channelId: channelID, maxResults: 1}, function(err, res) {
 		if(!err) {
 			var upload = res.items[0].contentDetails.upload
@@ -278,7 +278,7 @@ app.get('/oauth', function (req, res) {
 					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
 				} else {
 					res.send('<html><body><h3> Error:' +  parsedBody + '</h3></body></html>')
-				}	
+				}
 			} else {
 				log(err)
 				res.send('<html><body><h3> Error </h3></body></html>')
@@ -291,17 +291,17 @@ app.get('/oauth', function (req, res) {
 function caseybotCreateNewTeam(body) {
 	Company.find({ 'teamID': body.team_id}, function(err, companies) {
 		if(!err && companies.length == 0) {
-			var currentCompany = new Company({ 
+			var currentCompany = new Company({
 				teamID: body.team_id,
-				teamName: body.team_name, 
-				botID: body.bot.bot_user_id, 
+				teamName: body.team_name,
+				botID: body.bot.bot_user_id,
 				botToken: body.bot.bot_access_token,
 	    		globalToken: body.access_token
 			});
 			mongoSaveModel(currentCompany)
 			botkitSpawnBot(body.bot.bot_access_token)
 			log(currentCompany)
-		} 
+		}
 	})
 }
 
