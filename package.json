@@ -12,6 +12,7 @@
     "mongoose": "*",
     "forever": "*",
     "twitter": "*",
-    "botkit": "*"
+    "botkit": "*",
+    "request": "*"
   }
 }
