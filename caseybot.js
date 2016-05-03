@@ -22,13 +22,35 @@ console.log("Server started on " + port);
 
 
 /* MONGOOSE */
-// (F) Mongoose inti
+// (F) Mongoose init
 mongoose.init(function() {
 	console.log("Database Connected")
 	//facebookSpawn
 	botkitSpawnAllBots()
 	youtubeStartRequestIntervall()
 })
+
+// (F) Caseybot create new team
+function createNewTeam(body) {
+	mongoose.Company.find({ 'teamID': body.team_id}, function(err, companies) {
+		if(!err && companies.length == 0) {
+			var currentCompany = new Company({ 
+				teamID: body.team_id,
+				teamName: body.team_name, 
+				botID: body.bot.bot_user_id, 
+				botToken: body.bot.bot_access_token,
+	    		globalToken: body.access_token
+			});
+
+			mongoose.saveModel(currentCompany)
+			botkit.
+			botkit.spawnBot(body.bot.bot_access_token)
+			log(currentCompany)
+		} 
+	})
+}
+
+
 
 
 
@@ -53,11 +75,11 @@ function youtubeVideoCheck(videoID) {
 }
 
 // (F) Youtube Video Uploaded
-function youtubeVideoUploaded(videoID, title, image) {
+function youtubeVideoUploaded(videoID) {
 	var currentVideo = new mongoose.Video({ id: videoID });
 	mongoose.saveModel(currentVideo)
 	//facebook.functionName(currentVideo.getURL(), title, image)
-	//botkitSendMessageToAllTeams(currentVideo.getURL())
+	//botkit.sendMessageToAllTeams(currentVideo.getURL())
 }
 
 
@@ -92,50 +114,33 @@ function botkitSpawnAllBots() {
 
 
 
-// /* OAUTH */
-// app.get('/oauth', function (req, res) {
-// 	if(req.query.code != undefined) {
-// 		var form = {
-// 			code: req.query.code,
-// 			client_id: "19474255650.38637281299",
-// 			client_secret: process.env.CLIENT_SECRET,
-// 			redirect_uri: "http://107.170.61.40:3000/oauth"
-// 		}
+/* OAUTH */
+app.get('/oauth', function (req, res) {
+	if(req.query.code != undefined) {
+		var form = {
+			code: req.query.code,
+			client_id: "19474255650.38637281299",
+			client_secret: process.env.CLIENT_SECRET,
+			redirect_uri: "http://107.170.61.40:3000/oauth"
+		}
 
-// 		request.post({url:'https://slack.com/api/oauth.access', form: form}, function(err, httpResponse, body){
-// 			if(!err) {
-// 				var parsedBody = JSON.parse(body)
-// 				if(parsedBody.ok) {
-// 					caseybotCreateNewTeam(parsedBody)
-// 					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
-// 				} else {
-// 					res.send('<html><body><h3> Error:' +  parsedBody + '</h3></body></html>')
-// 				}	
-// 			} else {
-// 				log(err)
-// 				res.send('<html><body><h3> Error </h3></body></html>')
-// 			}
-// 		})
-// 	}
-// });
+		request.post({url:'https://slack.com/api/oauth.access', form: form}, function(err, httpResponse, body){
+			if(!err) {
+				var parsedBody = JSON.parse(body)
+				if(parsedBody.ok) {
+					caseybotCreateNewTeam(parsedBody)
+					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
+				} else {
+					res.send('<html><body><h3> Error:' +  parsedBody + '</h3></body></html>')
+				}	
+			} else {
+				log(err)
+				res.send('<html><body><h3> Error </h3></body></html>')
+			}
+		})
+	}
+});
 
-// // (F) Caseybot create new team
-// function caseybotCreateNewTeam(body) {
-// 	Company.find({ 'teamID': body.team_id}, function(err, companies) {
-// 		if(!err && companies.length == 0) {
-// 			var currentCompany = new Company({ 
-// 				teamID: body.team_id,
-// 				teamName: body.team_name, 
-// 				botID: body.bot.bot_user_id, 
-// 				botToken: body.bot.bot_access_token,
-// 	    		globalToken: body.access_token
-// 			});
-// 			mongoSaveModel(currentCompany)
-// 			botkitSpawnBot(body.bot.bot_access_token)
-// 			log(currentCompany)
-// 		} 
-// 	})
-// }
 
 
 

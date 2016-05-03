@@ -103,5 +103,5 @@ controller.hears(['beme', 'star trek', 'scotty'],['direct_message','direct_menti
 
 module.exports = {
 	spawnBot: spawnBot,
-	setInstagramAPIKey: setInstagramAPIKey
+	setTwitterAPIKey: setTwitterAPIKey
 }

@@ -75,7 +75,7 @@ function videoThumbnail(videoID, callback) {
 		if(!err) {
 			var upload = res.items[0].snippet
 			if(upload != undefined) {
-				callback(videoID, upload.title, upload.thumbnails.medium.url)
+				callback(videoID)
 			}
 		} else {
 			// Log Other Class
