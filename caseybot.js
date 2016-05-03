@@ -43,9 +43,8 @@ function createNewTeam(body) {
 			});
 
 			mongoose.saveModel(currentCompany)
-			botkit.
 			botkit.spawnBot(body.bot.bot_access_token)
-			log(currentCompany)
+			console.log(currentCompany)
 		} 
 	})
 }
@@ -79,7 +78,7 @@ function youtubeVideoUploaded(videoID) {
 	var currentVideo = new mongoose.Video({ id: videoID });
 	mongoose.saveModel(currentVideo)
 	//facebook.functionName(currentVideo.getURL(), title, image)
-	//botkit.sendMessageToAllTeams(currentVideo.getURL())
+	botkit.sendMessageToAllTeams(currentVideo.getURL())
 }
 
 
@@ -104,11 +103,6 @@ function botkitSpawnAllBots() {
 		}
 	});
 }
-
-
-
-
-
 
 
 
@@ -142,18 +136,14 @@ app.get('/oauth', function (req, res) {
 });
 
 
-
-
-
-
 // /* WEBSITE ---> MOVE */
-// app.get('/', function (req, res) {
-// 	var testString = '<a href="https://slack.com/oauth/authorize?scope=bot&client_id=19474255650.38637281299"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
-// 	Company.find({}, function(err, companies) {
-// 		if(!err) {
-// 			res.send('<html><body><h3> Subscribed User:' + companies.count + '</h3>' + testString + '</body></html>');
-// 		} else {
-// 			res.send('<html><body><h3> Error </h3>' + testString + '</body></html>');
-// 		}
-//   	});
-// });
+app.get('/', function (req, res) {
+	var testString = '<a href="https://slack.com/oauth/authorize?scope=bot&client_id=19474255650.38637281299"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>'
+	Company.find({}, function(err, companies) {
+		if(!err) {
+			res.send('<html><body><h3>' + testString + '</body></html>');
+		} else {
+			res.send('<html><body><h3> Error </h3>' + testString + '</body></html>');
+		}
+  	});
+});
