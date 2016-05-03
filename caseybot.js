@@ -15,7 +15,7 @@ var mongoose = require('./private_modules/mongoose');
 
 
 /* SERVER */
-var port = 3000
+var port = 1040
 server.listen(port);
 console.log("Server started on " + port);
 
