@@ -122,7 +122,7 @@ app.get('/oauth', function (req, res) {
 			if(!err) {
 				var parsedBody = JSON.parse(body)
 				if(parsedBody.ok) {
-					caseybotCreateNewTeam(parsedBody)
+					createNewTeam(parsedBody)
 					res.send('<html><body><h3> Succesfully Created! Visit Slack </h3></body></html>')
 				} else {
 					res.send('<html><body><h3> Error:' +  parsedBody + '</h3></body></html>')
