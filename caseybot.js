@@ -115,7 +115,7 @@ app.get('/oauth', function (req, res) {
 			code: req.query.code,
 			client_id: "19474255650.38637281299",
 			client_secret: process.env.CLIENT_SECRET,
-			redirect_uri: "http://angst.wtf:3000/oauth"
+			redirect_uri: "http://angst.wtf/oauth"
 		}
 
 		request.post({url:'https://slack.com/api/oauth.access', form: form}, function(err, httpResponse, body){
