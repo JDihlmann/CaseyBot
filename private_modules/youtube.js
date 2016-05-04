@@ -11,7 +11,7 @@ var currentID
 var channelID = 'UCtinbF-Q-fVthA0qrFQTgXQ'
 
 // Intervall Variables
-var intervall = 3000
+var intervall = 30000
 var youtubeRequestInterval
 var youtubeRequestCallback
 
