@@ -48,6 +48,7 @@ function channelActivities() {
 			}
 		} else {
 			// Log Other Class
+			console.log("(ERR YOUTUBE): Channel Activities")
 			console.log(err)
 		}
 	});
@@ -63,13 +64,14 @@ function latestVideo(callback) {
 			}
 		} else {
 			// Log Other Class
+			console.log("(ERR YOUTUBE): Latest Video")
 			console.log(err)
 		}
 	});
 }
 
 
-// (F) Make Youtube Vidoe Thumbnail Request
+// (F) Make Youtube Video Thumbnail Request
 function videoThumbnail(videoID, callback) {
 	youtube.videos.list({key: apiKey, part: 'snippet', id: videoID, maxResults: 1}, function(err, res) {
 		if(!err) {
@@ -79,6 +81,7 @@ function videoThumbnail(videoID, callback) {
 			}
 		} else {
 			// Log Other Class
+			console.log("(ERR YOUTUBE): Video Thumbnail")
 			console.log(err)
 		}
 	});

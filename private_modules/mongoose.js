@@ -64,7 +64,9 @@ function saveModel(obj) {
   		if (!err) {
 
   		} else {
-  			console.log(err)
+  			// Log Other Class
+			console.log("(ERROR MONGO): Save Model")
+			console.log(err)
   		}
 	})
 }

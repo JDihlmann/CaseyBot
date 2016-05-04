@@ -60,7 +60,9 @@ function sendMessageToAllTeams(url) {
 					})
 				}
   			} else {
-  				log(err)
+  				// Log Other Class
+				console.log("(ERROR BOTKIT): Send Message To All Teams")
+				console.log(err)
   			}
 		})
 	})
@@ -75,7 +77,9 @@ controller.hears(['tweet', 'twitter', 'tweets'],['direct_message','direct_mentio
 			var tweetURL = 'https://twitter.com/CaseyNeistat/status/' + tweetID
 			bot.reply(message, tweetURL);
 		} else {
-			log(err)
+			// Log Other Class
+			console.log("(ERROR BOTKIT): Hears Twitter")
+			console.log(err)
 			bot.reply(message, 'Sorry, I have to work right know. Try later! #DoMore');
 		}
 	})
