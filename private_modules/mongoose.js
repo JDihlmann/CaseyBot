@@ -2,29 +2,20 @@
 'use strict';
 
 
-// Modules 
+// Public modules 
 var mongoose = require('mongoose');
 
+// Private modules
+var log = require('./log');
 
-function init(callback) {
-	mongoose.connect('mongodb://localhost:27017/caseybot');
-	var db = mongoose.connection;
 
-	// (F) Database Avaible
-	db.once('open', function () {
-		callback()
-	});
-
-	// (F) Database Error
-	db.on('error', function (err) {
-		// Log in other Function
-		console.log('Database Connection Error: ', err);
-	});
-}
+// Init mongoose
+mongoose.connect('mongodb://localhost:27017/caseybot');
+var db = mongoose.connection;
 
 
 
-// (S) Mongo Schemes
+/* Mongo Schemes */ 
 // (V) Mongo schema for videos
 var videoSchema = mongoose.Schema({
     id: String
@@ -36,7 +27,7 @@ videoSchema.methods.getURL = function () {
 }
 
 // (V) Mongo schema for companies
-var companySchema = mongoose.Schema({
+var slackSchema = mongoose.Schema({
 	teamID: String,
 	teamName: String, 
 	botID: String,
@@ -46,16 +37,16 @@ var companySchema = mongoose.Schema({
 
 // (V) Mongo schema for companies
 var facebookSchema = mongoose.Schema({
-	id: String,
-	token: String
+	userID: String,
+	userName: String
 });
+
 
 
 // (M) Mongo Models
 var Video = mongoose.model('videos', videoSchema);
-var Company = mongoose.model('companies', companySchema);
+var Slack = mongoose.model('slack', slackSchema);
 var Facebook = mongoose.model('facebook', facebookSchema);
-
 
 
 // (F) Save model to database
@@ -64,18 +55,28 @@ function saveModel(obj) {
   		if (!err) {
 
   		} else {
-  			// Log Other Class
-			console.log("(ERROR MONGO): Save Model")
-			console.log(err)
+  			log.err(err)
   		}
 	})
+}
+
+
+function init(callback) {
+	db.once('open', function () {
+		callback()
+	});
+
+	db.on('error', function (err) {
+		log.err(err)
+	});
 }
 
 
 
 module.exports = {
 	Video: Video,
-	Company: Company,
+	Slack: Slack,
+	Facebook: Facebook,
 
 	init: init,
 	saveModel: saveModel
