@@ -35,11 +35,12 @@ function additionalMessaging() {
 // (F) Spawn bot  
 function spawnBot() { 
 	var bot = botkitHandler.controller.spawn({});
-	botkitHandler.controller.setupWebserver(1040, function(err, webserver) {
-  		botkitHandler.controller.createWebhookEndpoints(controller.webserver, bot, function() {
-      		log.out('Bot went online!');
-  		});
-	});
+	
+	// botkitHandler.controller.setupWebserver(1040, function(err, webserver) {
+ //  		botkitHandler.controller.createWebhookEndpoints(controller.webserver, bot, function() {
+ //      		log.out('Bot went online!');
+ //  		});
+	// });
 	additionalMessaging()
 }
 
