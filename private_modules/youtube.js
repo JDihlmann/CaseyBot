@@ -2,6 +2,7 @@
 'use strict';
 
 // Public Modules 
+var log = require('./log');
 var google = require('googleapis');
 var youtube = google.youtube('v3');
 
@@ -47,14 +48,12 @@ function channelActivities() {
 				youtubeRequestCallback(videoID)
 			}
 		} else {
-			// Log Other Class
-			console.log("(ERR YOUTUBE): Channel Activities")
-			console.log(err)
+			log.err(err)
 		}
 	});
 }
 
-function latestVideo(callback) {
+function latestVideo(callback) {+
 	youtube.activities.list({key: apiKey, part: 'contentDetails', channelId: channelID, maxResults: 1}, function(err, res) {
 		if(!err) {
 			var upload = res.items[0].contentDetails.upload
@@ -63,9 +62,7 @@ function latestVideo(callback) {
 				callback(videoID)
 			}
 		} else {
-			// Log Other Class
-			console.log("(ERR YOUTUBE): Latest Video")
-			console.log(err)
+			log.err(err)
 		}
 	});
 }
@@ -77,12 +74,15 @@ function videoThumbnail(videoID, callback) {
 		if(!err) {
 			var upload = res.items[0].snippet
 			if(upload != undefined) {
-				callback(videoID)
+				log.out(upload)
+				if(upload.thumbnails != undefined) {
+					if(upload.thumbnails.default != undefined) {
+						callback(videoID)
+					}
+				}
 			}
 		} else {
-			// Log Other Class
-			console.log("(ERR YOUTUBE): Video Thumbnail")
-			console.log(err)
+			log.err(err)
 		}
 	});
 }
