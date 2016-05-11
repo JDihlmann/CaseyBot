@@ -11,7 +11,7 @@ var mongoose = require('./mongoose');
 
 
 // (V) Botkit handler variables
-var controller = botkit.botkit.slackbot({log: false, debug: false})
+var controller = botkit.botkit.slackbot({})
 var responseActivation = ['direct_message','direct_mention','mention']
 var botkitHandler = new botkit.Handler(controller, responseActivation)
 

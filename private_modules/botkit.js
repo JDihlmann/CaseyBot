@@ -47,6 +47,29 @@ function Handler(controller, responseActivation) {
     self.controller.hears(['beme', 'star trek', 'scotty'], self.responseActivation, function(bot,message) {
         bot.reply(message, "Beme up scotty! Got the joke, ok wasn't funny ... sry");
     });
+
+    self.controller.hears('test', self.responseActivation, function(bot,message) {
+    	bot.api.chat.postMessage({
+    		as_user: true,
+    		channel: message.channel,
+    		text: "<https://www.youtube.com/watch?v=yGtza5cGgK0|   >",
+    		attachments: [{
+    			color: "#36a64f",
+            	text: "<https://www.youtube.com/watch?v=yGtza5cGgK0|Vlog 22> I am a test message",
+            	fields: [
+                {
+                    "title": "Priority",
+                    "value": "High",
+                    "short": false
+                }
+            ],
+			}]
+
+    	}, function (err, response) {
+
+    		console.log(response)
+    	})
+    });
 }
 
 

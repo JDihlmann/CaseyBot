@@ -59,7 +59,7 @@ function latestVideo(callback) {+
 			var upload = res.items[0].contentDetails.upload
 			if(upload != undefined) {
 				var videoID = res.items[0].contentDetails.upload.videoId
-				callback(videoID)
+				setTimeout(callback(videoID), 60000);
 			}
 		} else {
 			log.err(err)
